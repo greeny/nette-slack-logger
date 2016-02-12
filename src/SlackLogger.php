@@ -14,7 +14,7 @@ use Tracy\Logger;
 class SlackLogger extends Logger
 {
 
-	/** @var */
+	/** @var string */
 	private $slackUrl;
 
 	/** @var string */
