@@ -1,0 +1,14 @@
+{
+	"name": "greeny/nette-slack-logger",
+	"description": "Log your error messages directly into Slack room",
+	"license": "MIT",
+	"keywords": ["Nette", "Slack", "logger"],
+	"autoload": {
+		"psr-4": {
+			"greeny\\NetteSlackLogger\\": "src/"
+		}
+	},
+	"require": {
+		"tracy/tracy": "^2.3"
+	}
+}
