@@ -47,7 +47,7 @@ class SlackLogger extends Logger
 			}
 		}
 
-		if ($this->logUrl) {
+		if ($this->logUrl && $logFile) {
 			$message .= ' (<' . str_replace('__FILE__', basename($logFile), $this->logUrl) . '|Open log file>)';
 		}
 
