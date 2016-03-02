@@ -3,7 +3,7 @@ Log your errors directly into a Slack room
 
 ## Installation
 
-`composer require OndrejBouda/nette-slack-logger`
+`composer require ondrej-bouda/nette-slack-logger`
 
 And register extension to your config.neon:
 
