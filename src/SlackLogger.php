@@ -116,18 +116,10 @@ class SlackLogger extends Logger
 			],
 		];
 		$ctx = stream_context_create($ctxOptions);
-		$resultStr = file_get_contents($url, NULL, $ctx);
+		$resultStr = @file_get_contents($url, NULL, $ctx);
 
-		if ($resultStr === FALSE) {
-			throw new \RuntimeException('Error sending request to the Slack API.');
+		if ($resultStr != 'ok') {
+			throw new \RuntimeException('Error sending request to the Slack API: ' . $http_response_header[0]);
 		}
-		$result = json_decode($resultStr);
-		if ($result === NULL) {
-			throw new \RuntimeException('Error decoding response from Slack - not a well-formed JSON.');
-		}
-		if (!$result->ok) {
-			throw new \RuntimeException('Slack Error: ' . $result->error);
-		}
-		return $result;
 	}
 }
