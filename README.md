@@ -3,13 +3,13 @@ Log your errors directly into a Slack room
 
 ## Installation
 
-`composer require greeny/nette-slack-logger`
+`composer require OndrejBouda/nette-slack-logger`
 
 And register extension to your config.neon:
 
 ```yaml
 extensions:
-	slackLogger: greeny\NetteSlackLogger\DI\SlackLoggerExtension
+	slackLogger: OndrejBouda\NetteSlackLogger\DI\SlackLoggerExtension
 ```
 
 By default the logger is just turned off, since you probably do not want to log errors from dev environment. If you want

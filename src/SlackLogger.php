@@ -3,11 +3,9 @@
  * @author Tomáš Blatný
  * @author Ondřej Bouda <bouda@edookit.com>
  */
-
-namespace greeny\NetteSlackLogger;
+namespace OndrejBouda\NetteSlackLogger;
 
 use Exception;
-use Tracy\BlueScreen;
 use Tracy\Debugger;
 use Tracy\ILogger;
 use Tracy\Logger;

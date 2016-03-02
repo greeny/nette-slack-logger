@@ -1,12 +1,11 @@
 <?php
 /**
  * @author Tomáš Blatný
- * @author Ondřej Bouda
+ * @author Ondřej Bouda <bouda@edookit.com>
  */
+namespace OndrejBouda\NetteSlackLogger\DI;
 
-namespace greeny\NetteSlackLogger\DI;
-
-use greeny\NetteSlackLogger\SlackLogger;
+use OndrejBouda\NetteSlackLogger\SlackLogger;
 use Nette\DI\CompilerExtension;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpLiteral;
