@@ -70,12 +70,12 @@ class SlackLogger extends Logger
 	 */
 	private function sendSlackMessage(IMessage $message)
 	{
-		$result = @file_get_contents($this->slackUrl, NULL, stream_context_create([
+		@file_get_contents($this->slackUrl, NULL, stream_context_create([
 			'http' => [
 				'method' => 'POST',
 				'header' => 'Content-type: application/x-www-form-urlencoded',
 				'content' => http_build_query([
-					'payload' => json_encode($a = array_filter([
+					'payload' => json_encode(array_filter([
 						'channel' => $message->getChannel(),
 						'username' => $message->getName(),
 						'icon_emoji' => $message->getIcon(),
