@@ -18,18 +18,17 @@ class SlackLogger extends Logger
 	private $slackUrl;
 
 	/** @var array */
-	private $handlers;
+	private $handlers = [];
 
 	/** @var IMessageFactory */
 	private $messageFactory;
 
 
-	public function __construct($slackUrl, array $handlers, IMessageFactory $messageFactory)
+	public function __construct($slackUrl, IMessageFactory $messageFactory)
 	{
 		parent::__construct(Debugger::$logDirectory, Debugger::$email, Debugger::getBlueScreen());
 		$this->slackUrl = $slackUrl;
 		$this->messageFactory = $messageFactory;
-		$this->handlers = $handlers;
 	}
 
 
@@ -58,6 +57,7 @@ class SlackLogger extends Logger
 			$handler($event);
 		}
 
+
 		if (!$event->isCancelled()) {
 			$this->sendSlackMessage($message);
 		}
@@ -70,20 +70,21 @@ class SlackLogger extends Logger
 	 */
 	private function sendSlackMessage(IMessage $message)
 	{
-		file_get_contents($this->slackUrl, NULL, stream_context_create([
+		$result = @file_get_contents($this->slackUrl, NULL, stream_context_create([
 			'http' => [
 				'method' => 'POST',
 				'header' => 'Content-type: application/x-www-form-urlencoded',
 				'content' => http_build_query([
-					'payload' => json_encode(array_filter([
+					'payload' => json_encode($a = array_filter([
 						'channel' => $message->getChannel(),
 						'username' => $message->getName(),
 						'icon_emoji' => $message->getIcon(),
-						'attachments' => array_filter([
+						'attachments' => [array_filter([
+							'fallback' => $message->getText(),
 							'text' => $message->getText(),
 							'color' => $message->getColor(),
 							'pretext' => $message->getTitle(),
-						]),
+						])],
 					]))
 				]),
 			],

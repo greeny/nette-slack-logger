@@ -35,12 +35,12 @@ You can also futher configure your logger:
 slackLogger:
 	messageFactory: Some\Message\Factory
 	defaults:
-		channel: XXX,
-        icon => XXX,
-        name => XXX,
-        title => XXX,
-        text => XXX,
-        color => XXX,
+		channel: XXX
+		icon: XXX
+		name: XXX
+		title: XXX
+		text: XXX
+		color: XXX
 ```
 
 `messageFactory` holds FQN of class, which is implementing `greeny\NetteSlackLogger\IMessageFactory`. This class is used for creating messages for Slack.

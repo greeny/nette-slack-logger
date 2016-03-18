@@ -7,6 +7,7 @@ namespace greeny\NetteSlackLogger;
 
 use Exception;
 use Throwable;
+use Tracy\ILogger;
 
 
 class MessageFactory implements IMessageFactory
@@ -46,7 +47,29 @@ class MessageFactory implements IMessageFactory
 			$text .= ' (<' . str_replace('__FILE__', basename($logFile), $this->logUrl) . '|Open log file>)';
 		}
 
+		switch ($priority) {
+			case ILogger::DEBUG:
+			case ILogger::INFO:
+				$color = '#444444';
+				break;
+			case ILogger::ERROR:
+			case ILogger::WARNING:
+				$color = 'warning';
+				break;
+			case ILogger::EXCEPTION:
+			case ILogger::CRITICAL:
+				$color = 'danger';
+			break;
+			default:
+				$color = null;
+				break;
+		}
+
+		if ($color) {
+			$message->setColor($color);
+		}
 		$message->setText($text);
+		return $message;
 	}
 
 }
