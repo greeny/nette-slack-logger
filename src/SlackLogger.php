@@ -47,7 +47,7 @@ class SlackLogger extends Logger
 		$logFile = parent::log($value, $priority);
 
 		$message = ucfirst($priority) . ': ';
-		if ($value instanceof Exception) {
+		if ($value instanceof Exception || $value instanceof \Throwable) { // NOTE: backwards compatibility with PHP 5
 			$message .= $value->getMessage();
 		} elseif (is_array($value)) {
 			$message .= reset($value);
