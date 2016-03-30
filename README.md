@@ -18,6 +18,7 @@ If you want to enable it, add following lines to config.local.neon at your produ
 ```yaml
 slackLogger:
 	enabled: true
+	timeout: 60
 	slackUrl: https://hooks.slack.com/services/XXX
 	logUrl: http://path/to/your/logs/directory/__FILE__
 ```
@@ -26,6 +27,8 @@ Of course replace `slackUrl` with payload URL from your incomming webhook from S
 
 You can leave `logUrl` empty, but if you have your logs accessible through web (of course e.g. protected by HTTP auth or available only from company IPs),
 you can define this URL here. `__FILE__` will be replaced by filename of file with exception.
+
+You can also define request timeout in key `timeout`.
 
 ### Configuration
 

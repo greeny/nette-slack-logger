@@ -19,6 +19,7 @@ class SlackLoggerExtension extends CompilerExtension
 
 	private $defaults = [
 		'enabled' => FALSE,
+		'timeout' => 30,
 		'messageFactory' => MessageFactory::class,
 		'defaults' => [
 			'channel' => NULL,
@@ -37,16 +38,17 @@ class SlackLoggerExtension extends CompilerExtension
 		$builder = $this->getContainerBuilder();
 
 		Validators::assertField($config, 'enabled', 'boolean');
-		Validators::assertField($config, 'messageFactory', 'string');
 
 		if ($config['enabled']) {
+			Validators::assertField($config, 'messageFactory', 'string');
 			Validators::assertField($config, 'slackUrl', 'string');
 			Validators::assertField($config, 'logUrl', 'string');
-		}
+			Validators::assertField($config, 'timeout', 'int');
 
-		$builder->addDefinition($this->prefix('messageFactory'))
-			->setClass($config['messageFactory'])
-			->setArguments([$config['defaults'], $config['logUrl']]);
+			$builder->addDefinition($this->prefix('messageFactory'))
+				->setClass($config['messageFactory'])
+				->setArguments([$config['defaults'], $config['logUrl']]);
+		}
 	}
 
 
@@ -56,7 +58,7 @@ class SlackLoggerExtension extends CompilerExtension
 
 		if ($config['enabled']) {
 			$init = $class->getMethod('initialize');
-			$init->addBody(Debugger::class . '::setLogger(new ' . SlackLogger::class . '(?, $this->getService(?)));', [$config['slackUrl'], $this->prefix('messageFactory')]);
+			$init->addBody(Debugger::class . '::setLogger(new ' . SlackLogger::class . '(?, $this->getService(?), ?));', [$config['slackUrl'], $this->prefix('messageFactory'), $config['timeout']]);
 		}
 	}
 

@@ -23,12 +23,16 @@ class SlackLogger extends Logger
 	/** @var IMessageFactory */
 	private $messageFactory;
 
+	/** @var int */
+	private $timeout;
 
-	public function __construct($slackUrl, IMessageFactory $messageFactory)
+
+	public function __construct($slackUrl, IMessageFactory $messageFactory, $timeout)
 	{
 		parent::__construct(Debugger::$logDirectory, Debugger::$email, Debugger::getBlueScreen());
 		$this->slackUrl = $slackUrl;
 		$this->messageFactory = $messageFactory;
+		$this->timeout = $timeout;
 	}
 
 
@@ -74,6 +78,7 @@ class SlackLogger extends Logger
 			'http' => [
 				'method' => 'POST',
 				'header' => 'Content-type: application/x-www-form-urlencoded',
+				'timeout' => $this->timeout,
 				'content' => http_build_query([
 					'payload' => json_encode(array_filter([
 						'channel' => $message->getChannel(),
