@@ -3,6 +3,7 @@
  * @author Tomáš Blatný
  * @author Ondřej Bouda <bouda@edookit.com>
  */
+
 namespace OndrejBouda\NetteSlackLogger\DI;
 
 use OndrejBouda\NetteSlackLogger\SlackLogger;
@@ -17,12 +18,15 @@ use Tracy\Debugger;
 class SlackLoggerExtension extends CompilerExtension
 {
     private $defaults = [
-        'enabled' => FALSE,
-        'logUrl' => NULL,
-        'channel' => NULL,
-        'username' => NULL,
-        'icon' => NULL,
-        'pretext' => NULL,
+        'enabled' => false,
+        'logUrl' => null,
+        'channel' => null,
+        'username' => null,
+        'icon' => null,
+        'pretext' => null,
+        'interval' => null,
+        'file' => null,
+        'showIntervalWarning' => false,
     ];
 
 
@@ -40,10 +44,11 @@ class SlackLoggerExtension extends CompilerExtension
             Validators::assertField($config, 'icon', 'string|null');
             Validators::assertField($config, 'pretext', 'string|null');
             Validators::assertField($config, 'file', 'string|null');
-            Validators::assertField($config, 'interval', 'int|null');
+            Validators::assertField($config, 'interval', 'int|string|null');
+            Validators::assertField($config, 'showIntervalWarning', 'boolean|null');
 
             $init = $class->getMethod('initialize');
-            $init->addBody('?::setLogger(new ?(?, ?, ?, ?, ?, ?, ?, ?));', [
+            $init->addBody('?::setLogger(new ?(?, ?, ?, ?, ?, ?, ?, ?, ?));', [
                 new PhpLiteral(Debugger::class),
                 new PhpLiteral(SlackLogger::class),
                 $config['slackUrl'],
@@ -54,6 +59,7 @@ class SlackLoggerExtension extends CompilerExtension
                 $config['pretext'],
                 $config['file'],
                 $config['interval'],
+                $config['showIntervalWarning'],
             ]);
         }
     }
