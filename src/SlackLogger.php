@@ -87,11 +87,12 @@ class SlackLogger extends Logger
 
             $interval = $this->getInterval();
 
-            if (isset($interval)) {
+            if ($interval !== null) {
                 //log time of this notification
                 $this->mark();
                 if ($this->showIntervalWarning) {
-                    $message .= PHP_EOL . '*NOTE: No further Slack notifications will be sent for another ' . strtotime($interval) . ' seconds*';
+                    $secs = (is_numeric($interval) ? $interval : (strtotime($interval) ?: '?'));
+                    $message .= PHP_EOL . '*NOTE: No further Slack notifications will be sent for another ' . $secs . ' seconds*';
                 }
             }
 
@@ -124,13 +125,16 @@ class SlackLogger extends Logger
 
         $interval = $this->getInterval();
         $file = $this->getFile();
-        if (!isset($interval) || !isset($file)) {
-            if (!isset($interval)) {
-                return true;
-            } else {
-                throw new \InvalidArgumentException('Interval for SlackLogger is set, but no file for storing time of last notification is specified.');
-            }
+
+        if ($interval === null) {
+            return true;
         }
+        if ($file === null) {
+            throw new \InvalidArgumentException(
+                'Interval for SlackLogger is set, but no file for storing time of last notification is specified.'
+            );
+        }
+
         if (!is_numeric($interval)) {
             $interval = strtotime($interval) - $now;
         }
