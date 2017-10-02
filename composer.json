@@ -9,6 +9,7 @@
 		}
 	},
 	"require": {
+		"php": "^7.0",
 		"tracy/tracy": "^2.3"
 	}
 }
