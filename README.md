@@ -9,7 +9,7 @@ And register extension to your config.neon:
 
 ```yaml
 extensions:
-	slackLogger: OndrejBouda\NetteSlackLogger\DI\SlackLoggerExtension
+    slackLogger: OndrejBouda\NetteSlackLogger\DI\SlackLoggerExtension
 ```
 
 By default the logger is just turned off, since you probably do not want to log errors from dev environment. If you want
@@ -17,8 +17,8 @@ to enable it, add following lines to config.local.neon at your production server
 
 ```yaml
 slackLogger:
-	enabled: true
-	slackUrl: https://hooks.slack.com/services/XXX
+    enabled: true
+    slackUrl: https://hooks.slack.com/services/XXX
     logUrl: http://path/to/your/logs/directory/__FILE__
     channel: "#somechannel"
     username: "PHP Bot"
