@@ -39,6 +39,8 @@ class MessageFactory implements IMessageFactory
 			$text .= $exception->getMessage();
 		} elseif (is_array($exception)) {
 			$text .= reset($exception);
+		} else if ($exception instanceof \stdClass) {
+			$text .= print_r($exception, TRUE);
 		} else {
 			$text .= (string) $exception;
 		}
