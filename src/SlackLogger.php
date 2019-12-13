@@ -59,7 +59,7 @@ class SlackLogger extends Logger
      */
     public function log($value, $priority = self::INFO)
     {
-        $notify = $this->isAllowedByInterval();
+        $notify = $this->isAllowedByInterval($priority);
 
         $logFile = parent::log($value, $priority);
 
@@ -107,9 +107,14 @@ class SlackLogger extends Logger
      *
      * @return bool True whether mark was successful; false otherwise.
      */
-    private function mark(): bool
+    private function mark($priority = self::INFO): bool
     {
-        $hasMarked = (bool)@file_put_contents($this->getFile(), static::class . PHP_EOL . date("r"));
+        $hasMarked = (bool)@file_put_contents(
+            $this->getFile(),
+            static::class . PHP_EOL .
+            date("r") . PHP_EOL .
+            $priority
+        );
 
         if (!$hasMarked && !$this->loggedUnwriteableFile) {
             $this->loggedUnwriteableFile = true;
@@ -119,7 +124,7 @@ class SlackLogger extends Logger
         return $hasMarked;
     }
 
-    private function isAllowedByInterval(): bool
+    private function isAllowedByInterval($priority = self::INFO): bool
     {
         $now = time();
 
@@ -137,6 +142,13 @@ class SlackLogger extends Logger
 
         if (!is_numeric($interval)) {
             $interval = strtotime($interval) - $now;
+        }
+
+        $data = explode(PHP_EOL, file_get_contents($file));
+
+        //ignore the interval if a higher priority error than the last is being logged
+        if(self::isHigherPriority($priority, $data[2] ?? null))  {
+            return true;
         }
 
         $lastEventTime = @filemtime($this->getFile());
@@ -222,5 +234,23 @@ class SlackLogger extends Logger
         if ($resultStr != 'ok') {
             throw new \RuntimeException('Error sending request to the Slack API: ' . $http_response_header[0]);
         }
+    }
+
+    private static function isHigherPriority(?string $currentPriority, ?string $previousPriority): bool
+    {
+        $priorityList = [
+            self::DEBUG => 1,
+            self::INFO => 2,
+            self::WARNING => 3,
+            self::ERROR => 4,
+            self::EXCEPTION => 5,
+            self::CRITICAL => 6,
+        ];
+
+        //always send notification for unknown priorities
+        return (
+            ($priorityList[$currentPriority] ?? PHP_INT_MAX) >
+            ($priorityList[$previousPriority] ?? 0)
+        );
     }
 }
