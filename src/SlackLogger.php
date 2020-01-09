@@ -89,7 +89,7 @@ class SlackLogger extends Logger
 
             if ($interval !== null) {
                 //log time of this notification
-                $this->mark();
+                $this->mark($priority);
                 if ($this->showIntervalWarning) {
                     $secs = (is_numeric($interval) ? $interval : (strtotime($interval) ?: '?'));
                     $message .= PHP_EOL . '*NOTE: No further Slack notifications will be sent for another ' . $secs . ' seconds*';
